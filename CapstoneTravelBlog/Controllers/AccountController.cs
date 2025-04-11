@@ -40,6 +40,7 @@ namespace CapstoneTravelBlog.Controllers
             _jwtSettings = jwtSettings.Value;
         }
 
+
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDto registerRequestDto)
         {
@@ -124,6 +125,32 @@ namespace CapstoneTravelBlog.Controllers
                 Token = tokenString,
                 Expires = expiry
             });
+        }
+
+        [HttpGet("profile")]
+        [Authorize(Roles = "Admin,User")]
+        public async Task<IActionResult> GetProfile()
+        {
+            // Ottiene l'ID dell'utente dal token JWT
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized("Nessun utente associato al token.");
+
+            // Recupera dal DB l'utente
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return NotFound("Utente non trovato.");
+
+            var profileDto = new
+            {
+                user.Id,
+                user.FirstName,
+                user.LastName,
+                user.Email,
+                user.BirthDate
+            };
+
+            return Ok(profileDto);
         }
     }
 

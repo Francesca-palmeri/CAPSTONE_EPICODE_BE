@@ -19,8 +19,7 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Async(a => a.Console())
     .CreateLogger();
 
-try
-{
+
     Log.Information("Starting application.....");
 
     var builder = WebApplication.CreateBuilder(args);
@@ -115,27 +114,28 @@ try
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
     );
 
-   
 
+    builder.Services.AddCors();
 
     builder.Host.UseSerilog();
 
     var app = builder.Build();
+
+
+
+// Configure the HTTP request pipeline.
+app.Environment.IsDevelopment();
+        app.UseSwagger();
+        app.UseSwaggerUI();
+   
+
+    app.UseHttpsRedirection();
 
     app.UseCors(c =>
         c.AllowAnyOrigin()
         .AllowAnyMethod()
         .AllowAnyHeader()
         );
-
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
-
-    app.UseHttpsRedirection();
 
     app.UseAuthentication();
     app.UseAuthorization();
@@ -144,12 +144,3 @@ try
 
     app.Run();
 
-}
-catch (Exception ex)
-{
-    Log.Error(ex.Message);
-}
-finally
-{
-    await Log.CloseAndFlushAsync();
-}

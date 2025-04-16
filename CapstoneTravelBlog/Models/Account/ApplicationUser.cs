@@ -17,6 +17,11 @@ namespace CapstoneTravelBlog.Models.Account
         [Required]
         public required override string Email { get; set; }
 
+        public override string?  PhoneNumber { get; set; }
+
+        public string? AvatarUrl { get; set; }
+
+
         public ICollection<ApplicationUserRole> ApplicationUserRoles { get; set; } = new List<ApplicationUserRole>();
 
         public ICollection<Prenotazione> Prenotazioni { get; set; } = new List<Prenotazione>();

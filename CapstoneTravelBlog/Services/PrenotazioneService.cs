@@ -28,12 +28,12 @@
             }
         }
 
-        // Crea l'oggetto in memoria (senza salvarlo)
+        
         public async Task<Prenotazione?> CreatePrenotazioneAsync(AddPrenotazioneDto dto)
         {
             try
             {
-                // Controlla se esistono l'utente e il viaggio referenziati
+                
                 var userExists = await _context.Users.AnyAsync(u => u.Id == dto.UtenteId);
                 if (!userExists) return null;
 
@@ -44,7 +44,10 @@
                 {
                     DataPrenotazione = dto.DataPrenotazione ?? DateTime.Now,
                     UtenteId = dto.UtenteId,
-                    ViaggioId = dto.ViaggioId
+                    ViaggioId = dto.ViaggioId,
+                    NumeroPartecipanti = dto.NumeroPartecipanti,
+                    Tipologia = dto.Tipologia,
+                    Note = dto.Note
                 };
                 return pren;
             }
@@ -55,7 +58,7 @@
             }
         }
 
-        // Aggiunge la prenotazione su DB e salva
+        
         public async Task<bool> AddPrenotazioneAsync(Prenotazione pren)
         {
             try
@@ -70,7 +73,7 @@
             }
         }
 
-        // Restituisce tutte le prenotazioni (includendo dati su Utente e Viaggio)
+       
         public async Task<List<Prenotazione>?> GetPrenotazioniAsync()
         {
             try
@@ -87,7 +90,7 @@
             }
         }
 
-        // Mappa la lista di Prenotazioni in una lista di GetPrenotazioneDto
+        
         public async Task<List<GetPrenotazioneDto>?> GetPrenotazioniDtoAsync(List<Prenotazione> prenotazioni)
         {
             try
@@ -101,7 +104,10 @@
                     CognomeUtente = p.Utente?.LastName,
                     ViaggioId = p.ViaggioId,
                     TitoloViaggio = p.Viaggio?.Titolo,
-                    }).ToList();
+                    NumeroPartecipanti = p.NumeroPartecipanti,
+                    Tipologia = p.Tipologia,
+                    Note = p.Note,
+                }).ToList();
 
                 return prenDto;
             }
@@ -112,7 +118,6 @@
             }
         }
 
-        // Restituisce la singola prenotazione in DTO
         public async Task<GetPrenotazioneDto?> GetPrenotazioneDtoByIdAsync(int id)
         {
             try
@@ -132,7 +137,10 @@
                     NomeUtente = p.Utente?.FirstName,
                     CognomeUtente = p.Utente?.LastName,
                     ViaggioId = p.ViaggioId,
-                    TitoloViaggio = p.Viaggio?.Titolo
+                    TitoloViaggio = p.Viaggio?.Titolo,
+                    NumeroPartecipanti = p.NumeroPartecipanti,
+                    Tipologia = p.Tipologia,
+                    Note = p.Note,
                 };
                 return dto;
             }
@@ -143,7 +151,7 @@
             }
         }
 
-        // Elimina prenotazione
+      
         public async Task<bool> DeletePrenotazioneAsync(int id)
         {
             try
@@ -161,7 +169,6 @@
             }
         }
 
-        // Aggiorna prenotazione
         public async Task<bool> UpdatePrenotazioneAsync(int id, UpdatePrenotazioneDto dto)
         {
             try
@@ -169,10 +176,12 @@
                 var p = await _context.Prenotazioni.FirstOrDefaultAsync(x => x.Id == id);
                 if (p == null) return false;
 
-                // (Eventuali controlli su UtenteId e ViaggioId, se vuoi)
                 p.DataPrenotazione = dto.DataPrenotazione;
                 p.UtenteId = dto.UtenteId;
                 p.ViaggioId = dto.ViaggioId;
+                p.NumeroPartecipanti = dto.NumeroPartecipanti;
+                p.Tipologia = dto.Tipologia;
+                p.Note = dto.Note;
 
                 return await SaveAsync();
             }
@@ -183,7 +192,6 @@
             }
         }
 
-        // Esempio: ottieni tutte le prenotazioni di un certo utente
         public async Task<List<Prenotazione>?> GetPrenotazioniByUtenteAsync(string userId)
         {
             try

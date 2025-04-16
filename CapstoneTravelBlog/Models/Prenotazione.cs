@@ -20,4 +20,8 @@ public class Prenotazione
     [ForeignKey("ViaggioId")]
     public int ViaggioId { get; set; }
     public Viaggio? Viaggio { get; set; }
+
+    public int NumeroPartecipanti { get; set; }
+    public string Tipologia { get; set; }
+    public string? Note { get; set; }
 }

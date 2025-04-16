@@ -4,6 +4,7 @@ using CapstoneTravelBlog.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CapstoneTravelBlog.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250412130845_AggiuntaCampiPrenotazioni")]
+    partial class AggiuntaCampiPrenotazioni
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,15 +88,15 @@ namespace CapstoneTravelBlog.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "595ff117-ce5d-41e9-85b0-bbce66caeaec",
-                            ConcurrencyStamp = "595ff117-ce5d-41e9-85b0-bbce66caeaec",
+                            Id = "93d5036b-995e-4031-bba5-97a68275b168",
+                            ConcurrencyStamp = "93d5036b-995e-4031-bba5-97a68275b168",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "0ad15856-e805-4e17-8625-fdf684fd7450",
-                            ConcurrencyStamp = "0ad15856-e805-4e17-8625-fdf684fd7450",
+                            Id = "d17f69f7-894f-42dd-982e-d1f8154dda63",
+                            ConcurrencyStamp = "d17f69f7-894f-42dd-982e-d1f8154dda63",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -106,9 +109,6 @@ namespace CapstoneTravelBlog.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
-
-                    b.Property<string>("AvatarUrl")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateOnly>("BirthDate")
                         .HasColumnType("date");

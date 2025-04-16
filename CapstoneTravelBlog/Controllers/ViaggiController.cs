@@ -90,7 +90,7 @@ namespace CapstoneTravelBlog.Controllers
         }
 
         [HttpGet("{id:int}")]
-        [Authorize(Roles = "Admin")]
+        
         public async Task<IActionResult> GetViaggioById(int id)
         {
             var viaggioDto = await _viaggioService.GetViaggioDtoByIdAsync(id);

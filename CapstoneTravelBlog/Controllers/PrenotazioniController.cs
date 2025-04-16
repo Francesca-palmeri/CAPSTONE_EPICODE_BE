@@ -23,7 +23,7 @@ public class PrenotazioniController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "User , Admin")] // O come preferisci
+    [Authorize(Roles = "User , Admin")]
     public async Task<IActionResult> AddPrenotazione([FromBody] AddPrenotazioneDto dto)
     {
         var newPren = await _service.CreatePrenotazioneAsync(dto);

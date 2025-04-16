@@ -137,7 +137,9 @@ app.Environment.IsDevelopment();
         .AllowAnyHeader()
         );
 
-    app.UseAuthentication();
+app.UseRouting();
+
+app.UseAuthentication();
     app.UseAuthorization();
 
     app.MapControllers();

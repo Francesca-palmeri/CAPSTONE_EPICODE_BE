@@ -69,7 +69,10 @@ namespace CapstoneTravelBlog.Data
                 .HasForeignKey(g => g.ViaggioId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-          
+          modelBuilder.Entity<Viaggio>()
+                .Property( v => v.Prezzo)
+                .HasPrecision(18, 2);
+
 
             // Seed dei ruoli iniziali
             var adminId = Guid.NewGuid().ToString();

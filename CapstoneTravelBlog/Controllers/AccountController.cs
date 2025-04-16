@@ -62,7 +62,9 @@ namespace CapstoneTravelBlog.Controllers
                 FirstName = registerRequestDto.FirstName,
                 LastName = registerRequestDto.LastName,
                 BirthDate = registerRequestDto.BirthDate,
-                
+                PhoneNumber = registerRequestDto.PhoneNumber,
+                AvatarUrl = "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="
+
             };
 
             var result = await _userManager.CreateAsync(newUser, registerRequestDto.Password);
@@ -147,14 +149,53 @@ namespace CapstoneTravelBlog.Controllers
                 user.FirstName,
                 user.LastName,
                 user.Email,
-                user.BirthDate
+                user.BirthDate,
+                user.PhoneNumber,
+                user.AvatarUrl
             };
 
             return Ok(profileDto);
         }
+        [HttpPut("profile/avatar")]
+        [Authorize]
+        public async Task<IActionResult> UpdateAvatar([FromBody] string newAvatarUrl)
+        {
+            if (string.IsNullOrWhiteSpace(newAvatarUrl))
+                return BadRequest(new { message = "URL non valido." });
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) return NotFound("Utente non trovato.");
+
+            user.AvatarUrl = newAvatarUrl;
+            var result = await _userManager.UpdateAsync(user);
+
+            return result.Succeeded
+                ? Ok(new { avatarUrl = user.AvatarUrl })
+                : BadRequest(new { message = "Errore durante l'aggiornamento dell'avatar." });
+        }
+        [HttpDelete("profile/avatar")]
+        [Authorize]
+        public async Task<IActionResult> DeleteAvatar()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) return NotFound("Utente non trovato.");
+
+            if (string.IsNullOrWhiteSpace(user.AvatarUrl))
+                return BadRequest(new { message = "Nessun avatar da eliminare." });
+
+            user.AvatarUrl = null;
+            var result = await _userManager.UpdateAsync(user);
+
+            return result.Succeeded
+                ? Ok(new { message = "Avatar rimosso." })
+                : BadRequest(new { message = "Errore durante la rimozione dell'avatar." });
+        }
+
     }
 
- }
+}
 
 
 

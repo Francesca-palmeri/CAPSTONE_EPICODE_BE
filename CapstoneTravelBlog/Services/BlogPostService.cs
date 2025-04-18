@@ -2,6 +2,7 @@
 {
     using CapstoneTravelBlog.Data;
     using CapstoneTravelBlog.DTOs.Blog;
+    using CapstoneTravelBlog.Models;
     using Microsoft.EntityFrameworkCore;
 
     public class BlogPostService
@@ -67,7 +68,11 @@
         {
             try
             {
-                return await _context.BlogPosts.ToListAsync();
+                return await _context.BlogPosts
+                .Include(p => p.Commenti!)
+                .ThenInclude(c => c.Utente)
+                .ToListAsync();
+
             }
             catch (Exception ex)
             {
@@ -87,8 +92,18 @@
                     Contenuto = p.Contenuto,
                     ImmagineCopertina = p.ImmagineCopertina,
                     Categoria = p.Categoria,
-                    DataPubblicazione = p.DataPubblicazione
+                    DataPubblicazione = p.DataPubblicazione,
+                    Commenti = (p.Commenti ?? new List<Commento>()).Select(c => new GetCommentoDto
+                    {
+                        Id = c.Id,
+                        Testo = c.Testo,
+                        DataCreazione = c.DataCreazione,
+                        UtenteId = c.UtenteId,
+                        UtenteNome = c.Utente != null ? $"{c.Utente.FirstName} {c.Utente.LastName}" : "Anonimo",
+                        AvatarUrl = c.Utente?.AvatarUrl
+                    }).ToList()
                 }).ToList();
+
                 return postsDto;
             }
             catch (Exception ex)
@@ -97,6 +112,7 @@
                 return null;
             }
         }
+
 
         public async Task<GetBlogPostDto?> GetBlogPostDtoByIdAsync(int id)
         {
@@ -151,7 +167,7 @@
                 existingPost.Contenuto = dto.Contenuto;
                 existingPost.ImmagineCopertina = dto.ImmagineCopertina;
                 existingPost.Categoria = dto.Categoria;
-                // Non aggiorniamo DataPubblicazione se non serve
+                
 
                 return await SaveAsync();
             }

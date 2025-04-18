@@ -108,6 +108,7 @@ Log.Logger = new LoggerConfiguration()
     builder.Services.AddScoped<FraseUtileService>();
     builder.Services.AddScoped<GiornoViaggioService>();
     builder.Services.AddScoped<PrenotazioneService>();
+    builder.Services.AddScoped<CommentoService>();
     builder.Services.AddControllers();
 
     builder.Services.AddDbContext<ApplicationDbContext>(options =>

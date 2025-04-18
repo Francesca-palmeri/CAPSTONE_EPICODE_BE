@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
 using CapstoneTravelBlog.Models.Account;
+using CapstoneTravelBlog.Models;
 
 namespace CapstoneTravelBlog.Data
 {
@@ -24,6 +25,8 @@ namespace CapstoneTravelBlog.Data
         public DbSet<GiornoViaggio> GiorniViaggio { get; set; }
         public DbSet<BlogPost> BlogPosts { get; set; }
         public DbSet<FraseUtile> FrasiUtili { get; set; }
+        public DbSet<Commento> Commenti { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -72,6 +75,18 @@ namespace CapstoneTravelBlog.Data
           modelBuilder.Entity<Viaggio>()
                 .Property( v => v.Prezzo)
                 .HasPrecision(18, 2);
+
+            modelBuilder.Entity<Commento>()
+            .HasOne(c => c.Utente)
+            .WithMany()
+            .HasForeignKey(c => c.UtenteId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Commento>()
+                .HasOne(c => c.BlogPost)
+                .WithMany(p => p.Commenti)
+                .HasForeignKey(c => c.BlogPostId)
+                .OnDelete(DeleteBehavior.Cascade);
 
 
             // Seed dei ruoli iniziali

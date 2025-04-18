@@ -8,6 +8,9 @@
         public string ImmagineCopertina { get; set; } = "";
         public string Categoria { get; set; } = "";
         public DateTime DataPubblicazione { get; set; }
+
+        public List<GetCommentoDto> Commenti { get; set; } = new();
+
     }
 
 }

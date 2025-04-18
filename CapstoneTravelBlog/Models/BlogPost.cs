@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using CapstoneTravelBlog.Models;
 
 public class BlogPost
 {
@@ -25,4 +26,7 @@ public class BlogPost
     [DataType(DataType.Date)]
     [Display(Name = "Data di pubblicazione")]
     public DateTime DataPubblicazione { get; set; } = DateTime.Now;
+
+    public ICollection<Commento>? Commenti { get; set; }
+
 }

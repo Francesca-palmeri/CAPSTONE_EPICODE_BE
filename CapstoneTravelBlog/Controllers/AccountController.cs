@@ -49,7 +49,6 @@ namespace CapstoneTravelBlog.Controllers
                 return BadRequest(new { message = "Sei già loggato. Non puoi registrarti di nuovo." });
             }
 
-            // Verifica se l'email è già registrata
             var existingUser = await _userManager.FindByEmailAsync(registerRequestDto.Email);
             if (existingUser != null)
             {
@@ -70,7 +69,7 @@ namespace CapstoneTravelBlog.Controllers
             var result = await _userManager.CreateAsync(newUser, registerRequestDto.Password);
             if (!result.Succeeded)
             {
-                // Log oppure return BadRequest(result.Errors);
+     
                 return BadRequest(new { message = "Creazione utente fallita", errors = result.Errors });
             }
 
@@ -83,7 +82,7 @@ namespace CapstoneTravelBlog.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequestDto loginRequestDto)
         {
-            if (User?.Identity?.IsAuthenticated == true) // Added null checks for User and Identity
+            if (User?.Identity?.IsAuthenticated == true) 
             {
                 return BadRequest(new { message = "Sei già loggato." });
             }

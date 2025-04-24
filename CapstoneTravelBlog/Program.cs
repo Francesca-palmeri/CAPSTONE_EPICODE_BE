@@ -2,9 +2,13 @@ using CapstoneTravelBlog.Data;
 using CapstoneTravelBlog.Models.Account;
 using CapstoneTravelBlog.Services;
 using CapstoneTravelBlog.Settings;
+using FluentEmail.MailKitSmtp;
+using MailKit.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -109,7 +113,28 @@ Log.Logger = new LoggerConfiguration()
     builder.Services.AddScoped<GiornoViaggioService>();
     builder.Services.AddScoped<PrenotazioneService>();
     builder.Services.AddScoped<CommentoService>();
-    builder.Services.AddControllers();
+    builder.Services.AddScoped<ContattoService>();
+
+System.Net.ServicePointManager.ServerCertificateValidationCallback +=
+    (sender, cert, chain, sslPolicyErrors) => true;
+
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+
+builder.Services.AddFluentEmail(builder.Configuration["MailSettings:SenderEmail"])
+    .AddRazorRenderer()
+    .AddMailKitSender(new SmtpClientOptions
+    {
+        Server = builder.Configuration["MailSettings:Server"],
+        Port = builder.Configuration.GetValue<int>("MailSettings:Port"),
+        User = builder.Configuration["MailSettings:Username"],
+        Password = builder.Configuration["MailSettings:Password"],
+        UseSsl = builder.Configuration.GetValue<bool>("MailSettings:UseSsl"),
+        RequiresAuthentication = builder.Configuration.GetValue<bool>("MailSettings:RequiresAuthentication"),
+        SocketOptions = SecureSocketOptions.StartTls 
+    });
+
+
+builder.Services.AddControllers();
 
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))

@@ -155,6 +155,35 @@ namespace CapstoneTravelBlog.Controllers
 
             return Ok(profileDto);
         }
+
+        [HttpPut("profile")]
+        [Authorize]
+        public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileDto updateProfileDto)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) return NotFound("Utente non trovato.");
+
+            user.FirstName = updateProfileDto.FirstName;
+            user.LastName = updateProfileDto.LastName;
+            user.Email = updateProfileDto.Email;
+            user.UserName = updateProfileDto.Email; 
+            user.PhoneNumber = updateProfileDto.PhoneNumber;
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (result.Succeeded)
+            {
+                return Ok(new { message = "Profilo aggiornato con successo." });
+            }
+            else
+            {
+                return BadRequest(new { message = "Errore durante l'aggiornamento del profilo.", errors = result.Errors });
+            }
+        }
+
+
+
         [HttpPut("profile/avatar")]
         [Authorize]
         public async Task<IActionResult> UpdateAvatar([FromBody] string newAvatarUrl)

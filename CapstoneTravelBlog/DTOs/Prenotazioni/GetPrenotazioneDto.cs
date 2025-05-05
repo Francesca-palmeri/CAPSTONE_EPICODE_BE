@@ -15,9 +15,11 @@
         public string Tipologia { get; set; }
         public string? Note { get; set; }
 
-        public int ViaggioId { get; set; }
-        public string? TitoloViaggio { get; set; } 
+        public int? ViaggioId { get; set; }
+        public string? TitoloViaggio { get; set; }
 
-                  
-       }
+        public string? DescrizionePersonalizzata { get; set; }
+
+
+    }
 }

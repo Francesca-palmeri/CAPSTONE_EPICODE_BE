@@ -27,6 +27,8 @@ public class BlogPost
     [Display(Name = "Data di pubblicazione")]
     public DateTime DataPubblicazione { get; set; } = DateTime.Now;
 
+   
+
     public ICollection<Commento>? Commenti { get; set; }
 
 }

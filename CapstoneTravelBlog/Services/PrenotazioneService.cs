@@ -37,8 +37,12 @@
                 var userExists = await _context.Users.AnyAsync(u => u.Id == dto.UtenteId);
                 if (!userExists) return null;
 
-                var viaggioExists = await _context.Viaggi.AnyAsync(v => v.Id == dto.ViaggioId);
-                if (!viaggioExists) return null;
+                if (dto.Tipologia != "personalizzato")
+                {
+                    var viaggioExists = await _context.Viaggi.AnyAsync(v => v.Id == dto.ViaggioId);
+                    if (!viaggioExists) return null;
+                }
+
 
                 var pren = new Prenotazione
                 {
@@ -47,7 +51,8 @@
                     ViaggioId = dto.ViaggioId,
                     NumeroPartecipanti = dto.NumeroPartecipanti,
                     Tipologia = dto.Tipologia,
-                    Note = dto.Note
+                    Note = dto.Note,
+                    DescrizionePersonalizzata = dto.DescrizionePersonalizzata
                 };
                 return pren;
             }
@@ -107,6 +112,7 @@
                     NumeroPartecipanti = p.NumeroPartecipanti,
                     Tipologia = p.Tipologia,
                     Note = p.Note,
+                    DescrizionePersonalizzata = p.DescrizionePersonalizzata
                 }).ToList();
 
                 return prenDto;
@@ -122,6 +128,7 @@
         {
             try
             {
+
                 var p = await _context.Prenotazioni
                     .Include(p => p.Utente)
                     .Include(p => p.Viaggio)
@@ -141,6 +148,7 @@
                     NumeroPartecipanti = p.NumeroPartecipanti,
                     Tipologia = p.Tipologia,
                     Note = p.Note,
+                    DescrizionePersonalizzata = p.DescrizionePersonalizzata
                 };
                 return dto;
             }
@@ -182,6 +190,7 @@
                 p.NumeroPartecipanti = dto.NumeroPartecipanti;
                 p.Tipologia = dto.Tipologia;
                 p.Note = dto.Note;
+                p.DescrizionePersonalizzata = dto.DescrizionePersonalizzata;
 
                 return await SaveAsync();
             }

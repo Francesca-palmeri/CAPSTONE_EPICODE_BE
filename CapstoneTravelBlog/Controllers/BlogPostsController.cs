@@ -107,6 +107,8 @@ namespace CapstoneTravelBlog.Controllers
             });
         }
 
+
+
         [HttpPut("{id:int}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateBlogPost(int id, [FromBody] UpdateBlogPostDto dto)

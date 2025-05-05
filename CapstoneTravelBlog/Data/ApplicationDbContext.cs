@@ -90,8 +90,8 @@ namespace CapstoneTravelBlog.Data
 
 
             // Seed dei ruoli iniziali
-            var adminId = Guid.NewGuid().ToString();
-            var userId = Guid.NewGuid().ToString();
+            var adminId = "150ed783-a65c-48e5-841f-804aec8fce7e";
+            var userId = "854de5cb-7457-4473-99fd-5cce61678553";
 
             modelBuilder.Entity<ApplicationRole>().HasData(
                 new ApplicationRole

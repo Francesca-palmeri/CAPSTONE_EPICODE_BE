@@ -15,13 +15,15 @@ public class Prenotazione
     public string UtenteId { get; set; } = "";
     public ApplicationUser? Utente { get; set; }
 
-    [Required]
+    
     [Display(Name = "Viaggio")]
     [ForeignKey("ViaggioId")]
-    public int ViaggioId { get; set; }
+    public int? ViaggioId { get; set; }
     public Viaggio? Viaggio { get; set; }
 
     public int NumeroPartecipanti { get; set; }
     public string Tipologia { get; set; }
     public string? Note { get; set; }
+    public string? DescrizionePersonalizzata { get; set; }
+
 }
